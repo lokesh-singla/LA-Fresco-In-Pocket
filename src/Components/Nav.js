@@ -3,22 +3,25 @@ import {Switch, Route, Link} from 'react-router-dom';
 import UserContext from '../Context/UserContext';
 import SignIn_Modal from './Sign_in_modal';
 import SignUp_Modal from './Sign_up_modal';
-import LogOut_Handler from './LogOut_Handler';
 import './Comp-CSS/Nav.css';
+import Logout from './LogOut_Handler';
 
 
 
 function Nav() {
 
-
   const {userData, setUserData} = React.useContext(UserContext);
-  const logout = () => {
-    setUserData({
-      token: undefined,
-      user: undefined,
-    });
-    localStorage.setItem("auth-token", "");
-  };
+const Logout = ()=>{
+        setUserData({
+          token: undefined,
+          user: undefined,
+        });
+        localStorage.setItem("auth-token", "");
+        return(
+          <>
+          </>
+        )
+}
     const signInModalRef = React.useRef();
     const signUpModalRef = React.useRef();
     const openLoginModal = ()=>{
@@ -26,6 +29,9 @@ function Nav() {
     };
     const openSignupModal = ()=>{
         signUpModalRef.current.openModal()
+    };
+    const xbtn = {
+      backgroundColor: "#3333da",
     };
     
     return(
@@ -39,20 +45,20 @@ function Nav() {
   </Link>
 <div>
   <div className="buttons">
-  <Link to='/allProducts'><button className="btn">All Products</button></Link>
+  <Link to='/'><button className="btn" style={xbtn}>All Products</button></Link>
   <div className="dropDown">
-  <button className="btn">Categories</button>
+  <button className="btn" style={xbtn}>Categories</button>
   <div class="dropdown-content">
-    <a href="#">Category 1</a>
-    <a href="#">Category 2</a>
-    <a href="#">Category 3</a>
-    <a href="#">Category 4</a>
-    <a href="#">Category 5</a>
-    <a href="#">Category 6</a>
+    <a href="#">vegetable</a>
+    <a href="#">fruits</a>
+    <a href="#">sweets</a>
+    <a href="#">namkeen</a>
+    <a href="#">toiletries</a>
+    <a href="#">stationary</a>
   </div>
   </div>
-  <Link to='/help'><button className="btn">Help</button></Link>
-  <Link to='/contact-us'><button className="btn">Contact Us</button></Link>
+  <Link to='/help'><button className="btn" style={xbtn}>Help</button></Link>
+  <Link to='/contact-us'><button className="btn" style={xbtn}>Contact Us</button></Link>
 </div>
 
 <div className="search">
@@ -71,7 +77,7 @@ function Nav() {
 <div className="others">
 {userData.userInfo ? 
         <div>
-        <a onClick={logout} className="login">LogOut</a>
+        <a onClick={Logout} className="login">LogOut</a>
 <small>{userData.userInfo.username}</small>
       </div>
         : 
@@ -84,6 +90,10 @@ function Nav() {
   <div className="cart">
   <img src="https://image.flaticon.com/icons/svg/126/126083.svg" className="cartLogo"/>
   <Link to='/basket'><div className="cartText">My Cart</div></Link>
+  </div>
+
+  <div style={{"textAlign":"center","margin":"0px",}}>
+    <Link to="/adminwebsite">Admin Section</Link>
   </div>
 </div>
 

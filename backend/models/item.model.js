@@ -6,9 +6,10 @@ const itemSchema = new Schema({
     itemname: {type: String, require: true},
     description: { type: String, required: true },
     price: {type: Number, required: true},
+    quantity: {type: Number},
     },
     {
-        timestamps: true,
+        collection: 'items1812'
     }
 );
 

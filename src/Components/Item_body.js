@@ -1,108 +1,74 @@
-
 import React, { Component } from 'react';
+import Card from './Item-card'
 import ScrollMenu from 'react-horizontal-scrolling-menu';
-import items from "./Item-data";
-import Card from './Item-card.js';
-import axios from 'axios';
-import { timeout } from 'q';
-
-
-// One item component
-// selected prop will be passed
+import Axios from 'axios';
+import './Comp-CSS/item-body.css';
+ 
+const list = [];
+ 
 const MenuItem = ({text, price, selected}) => {
-    return <div
-      className={`menu-item ${selected ? 'active' : ''}`}
-      ><div className="card"><Card name={text} price={price}/></div></div>;
-  };
-   
-  // All items component
-  // Important! add unique key
-  export const Menu = (items, selected) =>
-    items.map((el) => {
-      const {name} = el;
-      const {price} = el;
-      return <MenuItem text={name} price={price} key={name} selected={selected} />;
-    });
-   
-  const myStyle = {
-    color: "#000000",
-    backgroundColor: "#dddddd",
-    padding: "10px",
-    fontFamily: "Arial"
-    };
+  return <div
+    className={`menu-item ${selected ? 'active' : ''}`}
+    ><div className="card"><Card name={text} price = {price} /></div></div>;
+};
+ 
 
-
-  const Arrow = ({ text, myStyle }) => {
-    return (
-      <div
-        style={myStyle}
-      >{text}</div>
-    );
-  };
-
-  var xtemp = [];
-   
-   
-  const ArrowLeft = Arrow({ text: '<', myStyle: myStyle });
-  const ArrowRight = Arrow({ text: '>', myStyle: myStyle });   
-  const selected = "potato";
-
-export class ItemNavigator extends React.Component {
-
+export const Menu = (list, selected) =>
+  list.map(el => {
+    const {itemname} = el;
+    const {price} = el;
+ 
+    return <MenuItem text={itemname} key={itemname} price={price} selected={selected} />;
+  });
+ 
+ 
+const Arrow = ({ text, className }) => {
+  return (
+    <div
+      className={className}
+    >{text}</div>
+  );
+};
+ 
+ 
+const ArrowLeft = Arrow({ text: '<', className: 'arrow-prev' });
+const ArrowRight = Arrow({ text: '>', className: 'arrow-next' });
+ 
+const selected = 'item1';
+const menuItems = [];
+ 
+class ItemNavigator extends Component {
   constructor(props) {
     super(props);
-    this.menuItems = Menu(items, selected);
   }
-
+ 
+  
   state = {
-      selected,
-      persons: [],
-      menuItems: xtemp,
+    selected,
+    menuItems,
+    list
   };
-
+ 
   onSelect = key => {
-      this.setState({ selected: key });
+    this.setState({ selected: key });
   }
 
-  xparser(xres) {
-    var temp = [];
-    for(var i=0; i<xres.data.length; i++){
-      temp.push({
-        name: xres.data[i].itemname,
-        price: xres.data[i].price,
-      });
-     
-    } 
-    xtemp = temp;
-    var xfacts = Menu(xtemp, this.state.selected);
-    this.setState({menuItems: xfacts});
-    return temp;
+  componentDidMount() {
+    Axios.get('http://localhost:3000/items/')
+      .then((res) => {
+          this.setState({list: res.data});
+          console.log(this.state.list);
+          this.setState({menuItems: Menu(this.state.list, selected)})
+        });        
   }
-
-
-
-  componentWillMount() {
-    axios.get('http://localhost:5000/items/')
-      .then(res => {
-        this.setState({ persons: res.data});
-        this.xparser(res);
-        });
-  }
-
+ 
+ 
   render() {
-    const { selected } = this.state.selected;
-    // Create menu from items
+    const { selected } = this.state;
     const menu = this.state.menuItems;
-
-    if(this.menuItems.length === 0 || menu.length === 0 || menu === undefined){
-      return (<div>/loading</div>);
-
-    }
-    if(this.state.persons.length === 0){
-      return (<span>/loading...</span>);
-    }
+ 
     return (
-      <div className="card">
+      <div className="App">
         <ScrollMenu
           data={menu}
           arrowLeft={ArrowLeft}

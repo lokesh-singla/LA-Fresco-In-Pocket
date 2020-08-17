@@ -38,18 +38,17 @@ const Modal = React.forwardRef((props, ref)=>{
         e.preventDefault();
 
            const loginRes = await Axios.post(
-                "http://localhost:5000/users/login",
+                "http://localhost:3000/users/login",
                  {
                   username: email,
                   password: password,
                 }
                 )
-                    console.log(loginRes);
+                    
                     setUserData({
                         token: loginRes.data.token,
                         userInfo: loginRes.data.user
                     });
-                    console.log(userData);
                     localStorage.setItem("auth-token",loginRes.data.token);
 
             close();
