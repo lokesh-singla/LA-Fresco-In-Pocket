@@ -7,6 +7,8 @@ import './Comp-CSS/Nav.css';
 import Cookies from 'js-cookie';
 import {useHistory} from 'react-router-dom';
 
+var navTransi = true;
+
 
 function Nav() {
 
@@ -26,7 +28,7 @@ function Nav() {
     const [navSearchOP, setNSOP] = React.useState("nav-search-div");
     const [categoryDropdown, setCDD] = React.useState("dropdown-category");
     const [catClass, setCatClass] = React.useState(["Category","cat-class"]);
-
+    
     const toggleCat = () =>{
       if(categoryDropdown === 'dropdown-category')
       {
@@ -41,6 +43,7 @@ function Nav() {
     }
 
     const toggleNav = ()=>{
+      if(navTransi){
       if(navStyle === "nav-links")
       {
         setNavStyle("nav-links open");
@@ -52,11 +55,15 @@ function Nav() {
       {
         setNavStyle("nav-links");
         setNPS("navPanel");
+        navTransi = false;
         setTimeout(() => {
           setSNC("shopName");
         setNavClass("");
-        }, 1000);
+        navTransi = true;
+        }, 1000)
+      
       }
+    }
     }
     const { windowWidth } = useWindowDimensions();
     if(windowWidth>=800 && navSearchOP!=="nav-search-div"){ setNSOP("nav-search-div") }
@@ -79,7 +86,7 @@ function Nav() {
         <>
         <SignIn_Modal ref={signInModalRef}/>
         <SignUp_Modal ref={signUpModalRef}/>
-<nav className={navClass}>
+<nav className={navClass} id = "Top">
       <div className="hamburger" onClick={toggleNav}>
         <div className="line"></div>
         <div className="line"></div>
@@ -102,14 +109,7 @@ function Nav() {
       </div>
       <ul className={navStyle}>
         <li><Link to='/allProducts'>All Products</Link></li>
-    <li><a className={catClass[1]} onClick={toggleCat}>{catClass[0]}</a><div class={categoryDropdown}>
-    <a href="#">Cat-1</a>
-    <a href="#">Cat-2</a>
-    <a href="#">Cat-3</a>
-    <a href="#">Cat-4</a>
-    <a href="#">Cat-5</a>
-    <Link onClick={toggleCat} to='/categories'>Show All</Link>
-  </div></li>
+        <li><a href='/#Categories'>Categories</a></li>
         <li><Link to='/help'>Help</Link></li>
       </ul>
      {
