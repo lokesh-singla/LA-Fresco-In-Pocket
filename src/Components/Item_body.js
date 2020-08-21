@@ -5,7 +5,7 @@ import {Link} from 'react-router-dom';
 import Axios from 'axios';
 import './Comp-CSS/item-body.css';
 import Categories from './Categories';
-import Allproducts from './All_products';
+import Allproducts from './All_Products';
 
 const list = [];
  

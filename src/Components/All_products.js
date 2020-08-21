@@ -16,14 +16,24 @@ export class Allproducts extends React.Component {
     itemOption: [],
     dict: {},
     value:"Please select option",
+    list:[]
   };
 
   componentDidMount(){
-    const list = this.props.list;
+
+    axios.get('http://localhost:5000/items/')
+      .then((res) => {
+          this.setState({list: res.data});
+          console.log(this.state.list);
+        
+
+
+    const list = this.state.list;
+    console.log(this.state.list.length);
     const dict = {};
 
     //// some relevant processing
-    for(var i=0;i<list.length;i++){
+    for(var i=0;i<this.state.list.length;i++){
       if(dict[list[i].description] === undefined){
         dict[list[i].description] = [];
       }
@@ -69,7 +79,7 @@ export class Allproducts extends React.Component {
         keyOption: keyOption,
         itemList: itemList,
       });
-
+    });
   }
 
   render() {
@@ -82,8 +92,10 @@ export class Allproducts extends React.Component {
             <h1 style={{textAlign:"center"}} >All Products</h1>
               <p><a href="/#Top">back to top</a></p>
             </div>
-            
-            <div>
+            <div className="col-lg-3">
+                
+              </div>
+            <div className="col-lg-9">
               {this.state.itemList}
             </div>
         </div>
